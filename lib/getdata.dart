@@ -53,19 +53,24 @@ class _GetDataPageState extends State<GetDataPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return isLoading? const Center(
-        child: Text(
-        "loading",
-        style: TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.bold
-        ))): Scaffold(
+
+      return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: ListView.builder(
+      body: isLoading? Container(
+          color: Colors.amber[100],
+          child: const Center(
+              child: Text(
+                  "loading",
+                  style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold
+                  ))),
+        ):
+          ListView.builder(
           itemCount: data.length ,
           itemBuilder: (context,index){
             return Card(
@@ -92,5 +97,6 @@ class _GetDataPageState extends State<GetDataPage> {
         child: const Icon(Icons.downloading),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+
   }
 }
