@@ -4,6 +4,7 @@ import 'package:myflutterapp/home.dart';
 import 'package:myflutterapp/increment.dart';
 //relative import
 import 'getdata.dart';
+import 'detail_data.dart';
 
 
 void main() {
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(title: 'home',),
         '/increment' : (context) => const IncrementPage(title: 'increment',),
-        '/getdata' : (context) => const GetDataPage(title: 'getdata',)
+        '/getdata' : (context) => const GetDataPage(title: 'getdata',),
+        '/detaildata' : (context) => const DetailDataPage(title: 'detaildata',)
       },
     );
   }

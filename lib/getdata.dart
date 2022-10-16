@@ -21,6 +21,7 @@ class GetDataPage extends StatefulWidget {
 
 class _GetDataPageState extends State<GetDataPage> {
   List data =[];
+  bool isLoading =true;
 
   void getData() async {
 
@@ -28,13 +29,13 @@ class _GetDataPageState extends State<GetDataPage> {
       var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
       Response response = await get(url);
       setState(() {
+        isLoading = false;
         data = jsonDecode(response.body);
       });
       print(data);
     } on Exception catch (e) {
       print('$e on get');
     }
-    print("in getdata");
   }
 
 
@@ -42,19 +43,23 @@ class _GetDataPageState extends State<GetDataPage> {
   void initState() {
     super.initState();
     getData();
-    print("in initstate");
   }
 
   @override
   Widget build(BuildContext context) {
-    print("in build of get data");
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
+    return isLoading? const Center(
+        child: Text(
+        "loading",
+        style: TextStyle(
+          fontSize: 50,
+          fontWeight: FontWeight.bold
+        ))): Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -65,7 +70,11 @@ class _GetDataPageState extends State<GetDataPage> {
           itemBuilder: (context,index){
             return Card(
               child: ListTile(
-                onTap: (){},
+                onTap: (){
+                  Navigator.pushNamed(context, '/detaildata',arguments: {
+                    'id': data[index]['id'],
+                    'title': data[index]['title']});
+                },
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
