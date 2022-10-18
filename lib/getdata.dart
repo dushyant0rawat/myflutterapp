@@ -26,13 +26,14 @@ class _GetDataPageState extends State<GetDataPage> {
   void getData() async {
 
     try {
-      var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
+      // var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
+      var url = Uri.https('dushyant0rawat.github.io','/todos/');
       Response response = await get(url);
       setState(() {
         isLoading = false;
         data = jsonDecode(response.body);
       });
-      print(data);
+      // print(data);
     } on Exception catch (e) {
       print('$e on get');
     }
