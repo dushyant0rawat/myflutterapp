@@ -26,7 +26,9 @@ class _GetDataPageState extends State<GetDataPage> {
   void getData() async {
 
     try {
-      var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
+      // var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
+      // var url = Uri.http('127.0.0.1:5551','/');
+      var url = Uri.http('localhost:5551','/');
       Response response = await get(url);
       setState(() {
         isLoading = false;
