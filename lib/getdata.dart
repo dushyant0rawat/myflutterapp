@@ -22,13 +22,14 @@ class GetDataPage extends StatefulWidget {
 class _GetDataPageState extends State<GetDataPage> {
   List data =[];
   bool isLoading =true;
-
+  String loadingString = 'loading';
   void getData() async {
 
     try {
       // var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
       // var url = Uri.http('127.0.0.1:5551','/');
-      var url = Uri.http('localhost:5551','/');
+      // var url = Uri.http('localhost:5551','/');
+      var url = Uri.https('localhost:5551','/');
       Response response = await get(url);
       setState(() {
         isLoading = false;
@@ -37,7 +38,11 @@ class _GetDataPageState extends State<GetDataPage> {
       // print(data);
     } on Exception catch (e) {
       print('$e on get');
+      setState(() {
+        loadingString = e.toString();
+      });
     }
+
   }
 
 
@@ -64,9 +69,9 @@ class _GetDataPageState extends State<GetDataPage> {
       ),
       body: isLoading? Container(
           color: Colors.amber[100],
-          child: const Center(
+          child: Center(
               child: Text(
-                  "loading",
+                  loadingString,
                   style: TextStyle(
                       fontSize: 50,
                       fontWeight: FontWeight.bold
