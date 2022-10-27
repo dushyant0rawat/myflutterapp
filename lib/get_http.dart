@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
-class GetDataPage extends StatefulWidget {
-  const GetDataPage({super.key, required this.title});
+import 'dart:io';
+import 'package:flutter/services.dart';
+
+class GetHTTPPage extends StatefulWidget {
+  const GetHTTPPage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -16,10 +19,10 @@ class GetDataPage extends StatefulWidget {
   final String title;
 
   @override
-  State<GetDataPage> createState() => _GetDataPageState();
+  State<GetHTTPPage> createState() => _GetHTTPPageState();
 }
 
-class _GetDataPageState extends State<GetDataPage> {
+class _GetHTTPPageState extends State<GetHTTPPage> {
   List data =[];
   bool isLoading =true;
   String loadingString = 'loading';
@@ -45,11 +48,69 @@ class _GetDataPageState extends State<GetDataPage> {
 
   }
 
+  Future<SecurityContext> get globalContext async {
+    final sslCert1 = await rootBundle.load('assets/cert.pem');
+    final keystore = await rootBundle.load('assets/keystore.p12');
+    // SecurityContext ctx = SecurityContext.defaultContext;
+
+    SecurityContext ctx = SecurityContext(withTrustedRoots: false);
+    ctx.setTrustedCertificatesBytes(sslCert1.buffer.asInt8List());
+/*  String password = 'xxxxxx';
+  ctx.useCertificateChainBytes(keystore.buffer.asUint8List(),password: password);
+  ctx.usePrivateKeyBytes(keystore.buffer.asUint8List(),password: password);*/
+    return ctx;
+  }
+
+  Future<void> getDatatHttpClient() async{
+    bool _certificateCheck(truststore, String host, int port) {
+      print("in _certificateCheck t: $truststore h: $host p : $port ");
+      return false;
+    }
+    var client = HttpClient(context: await globalContext)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port){
+        print("in bad certificate $cert $host $port");
+        return true;
+      };
+
+
+    var uri = Uri.parse("https://localhost:5551");
+    print(uri.host); // 10.0.0.1
+    print(uri.port); // 5551
+    print(uri.path); //
+
+    var request = await client.getUrl(uri);
+    var response = await request.close();
+
+
+    if (response.statusCode == HttpStatus.ok) {
+      var jsonString = await response.transform(utf8.decoder).join();
+      var json = await jsonDecode(jsonString);
+      setState(() {
+        try{
+          data = json;
+          isLoading = false;
+        } catch(e){
+          loadingString = e.toString();
+        }
+
+      });
+
+    } else {
+
+      setState(() {
+        loadingString = " status code is ${response.statusCode.toString()}";
+      });
+
+    }
+  }
+
+
 
   @override
   void initState() {
     super.initState();
-    getData();
+    // getData();
+    getDatatHttpClient();
   }
 
   @override

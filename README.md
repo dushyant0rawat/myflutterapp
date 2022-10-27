@@ -35,3 +35,9 @@ adb.exe: error: more than one device/emulator
 is thrown even though there is only one device   
 
 
+http package does not have option for self signed certificate and is higher level api than
+dart:io's httpclient. Httpclient has option to specify SecurityContext and  badCertificateCallback.  
+
+Copy the public certificates to the asset folder and update pubspec.yaml in order to use in SecurityContext.
+
+

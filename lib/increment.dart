@@ -76,12 +76,12 @@ class _IncrementPageState extends State<IncrementPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context,'/getdata');
+                Navigator.pushNamed(context,'/gethttp');
               },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.amber[900])
                 ),
-              child: const Text('go to getdata')
+              child: const Text('go to gethttp')
              ),
           ],
         ),
