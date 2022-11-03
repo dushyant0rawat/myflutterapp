@@ -32,7 +32,12 @@ class _GetHTTPPageState extends State<GetHTTPPage> {
       // var url = Uri.https('jsonplaceholder.typicode.com','/todos/');
       // var url = Uri.http('127.0.0.1:5551','/');
       // var url = Uri.http('localhost:5551','/');
-      var url = Uri.https('localhost:5551','/');
+      // var url = Uri.https('localhost:5551','/');
+
+      final config = await rootBundle.loadString('assets/config.json');
+      final jsonResult = jsonDecode(config);
+      print("jsonResult: $jsonResult host: ${jsonResult['host']} path: ${jsonResult['path']}");
+      var url = Uri.https(jsonResult['host'], '${"/" + jsonResult['path']}/');
       Response response = await get(url);
       setState(() {
         isLoading = false;
@@ -73,9 +78,13 @@ class _GetHTTPPageState extends State<GetHTTPPage> {
       };
 
 
-    var uri = Uri.parse("https://localhost:5551");
-    print(uri.host); // 10.0.0.1
-    print(uri.port); // 5551
+    // var uri = Uri.parse("https://localhost:5551");
+    final config = await rootBundle.loadString('assets/config.json');
+    final jsonResult = jsonDecode(config);
+    print("jsonResult: $jsonResult host: ${jsonResult['host']} path: ${jsonResult['path']}");
+    var uri = Uri.parse(jsonResult['host'] + "/" + jsonResult['path']);
+    print(uri.host); //
+    print(uri.port); //
     print(uri.path); //
 
     var request = await client.getUrl(uri);
